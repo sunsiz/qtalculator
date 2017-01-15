@@ -11,10 +11,9 @@
 
 %%
 
-[ \t]	; // ignore all whitespace
+[ \t\n]	;
 [0-9]+\.[0-9]+ 	{yylval.fval = atof(yytext); return T_FLOAT;}
-[0-9]+		{yylval.ival = atoi(yytext); return T_INT;}
-\n		{return T_NEWLINE;}
+[0-9]+		{yylval.fval = atof(yytext); return T_FLOAT;}
 "+"		{return T_PLUS;}
 "-"		{return T_MINUS;}
 "*"		{return T_MULTIPLY;}
