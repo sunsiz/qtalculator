@@ -28,7 +28,7 @@ void Calculator::evaluateSlot(const QString &arg) {
     QString strResult = QString::number(result);
 
     if(!error) {
-        printf("%f\n", result);
+        printf("Result %f\n", result);
 
         memo->setProperty("text", strResult);
         resultDisplay->setProperty("text", "");
@@ -45,7 +45,7 @@ void Calculator::evaluateSlot(const QString &arg) {
 void Calculator::saveMemSlot(const QString &arg) {
     QObject* memo = this->parent()->findChild<QObject*>("memo");
     mem = memo->property("text").toFloat();
-    printf("Saved %f\n", mem);
+    printf("Saved to mem %f\n", mem);
     memIsFull = 1;
 }
 
