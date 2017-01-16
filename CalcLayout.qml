@@ -2,11 +2,9 @@
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls.Material 2.0
-
 
 GridLayout {
-    id: "grid"
+    id: "mgrid"
     anchors.fill: parent
     anchors.margins: 0
 
@@ -15,8 +13,8 @@ GridLayout {
 
     columns: 6
     rows: 5
-    property double colMulti : grid.width / grid.columns
-    property double rowMulti : grid.height / grid.rows
+    property double colMulti : mgrid.width / mgrid.columns
+    property double rowMulti : mgrid.height / mgrid.rows
 
     function prefWidth(item){
         return colMulti * item.Layout.columnSpan
@@ -144,8 +142,8 @@ GridLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        Layout.preferredWidth  : grid.prefWidth(this)
-        Layout.preferredHeight : grid.prefHeight(this)
+        Layout.preferredWidth  : mgrid.prefWidth(this)
+        Layout.preferredHeight : mgrid.prefHeight(this)
 
         background: Rectangle {
             color: buttonMS.down ? "#B0BEC5" : "#CFD8DC"
@@ -173,8 +171,8 @@ GridLayout {
 
         enabled: false
 
-        Layout.preferredWidth  : grid.prefWidth(this)
-        Layout.preferredHeight : grid.prefHeight(this)
+        Layout.preferredWidth  : mgrid.prefWidth(this)
+        Layout.preferredHeight : mgrid.prefHeight(this)
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -204,8 +202,8 @@ GridLayout {
         enabled: false
 
 
-        Layout.preferredWidth  : grid.prefWidth(this)
-        Layout.preferredHeight : grid.prefHeight(this)
+        Layout.preferredWidth  : mgrid.prefWidth(this)
+        Layout.preferredHeight : mgrid.prefHeight(this)
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -231,8 +229,8 @@ GridLayout {
         Layout.row: 2
 
 
-        Layout.preferredWidth  : grid.prefWidth(this)
-        Layout.preferredHeight : grid.prefHeight(this)
+        Layout.preferredWidth  : mgrid.prefWidth(this)
+        Layout.preferredHeight : mgrid.prefHeight(this)
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -261,8 +259,8 @@ GridLayout {
         Layout.row: 2
 
 
-        Layout.preferredWidth  : grid.prefWidth(this)
-        Layout.preferredHeight : grid.prefHeight(this)
+        Layout.preferredWidth  : mgrid.prefWidth(this)
+        Layout.preferredHeight : mgrid.prefHeight(this)
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
