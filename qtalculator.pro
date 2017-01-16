@@ -11,7 +11,8 @@ OTHER_FILES +=  \
     $$FLEXSOURCES \
     $$BISONSOURCES
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    calculator.cpp
 bisonsource.input = BISONSOURCES
 bisonsource.output = ${QMAKE_FILE_BASE}.cpp
 bisonsource.commands = bison -d --defines=${QMAKE_FILE_BASE}.h -o ${QMAKE_FILE_BASE}.cpp ${QMAKE_FILE_IN}
@@ -73,7 +74,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    lexer.l
+    lexer.l \
+    calculator.h
 
 DISTFILES += \
     lexer.l \

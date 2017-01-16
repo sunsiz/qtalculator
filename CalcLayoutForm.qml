@@ -11,7 +11,11 @@ GridLayout {
     columns: 6
     rows: 5
 
-    property var validatorRegExp: /^([(]*)(([1-9]+[0]+)+)(?:([-+*\/\^])([(]*)(([1-9]+[0]+)+([)]*)))+$/
+    property var validatorRegExp: /^([(]*)(([0-9]+)+)(?:([-+*\/\^])([(]*)(([0-9]+)+([)]*)))+$/
+
+    function setResult (arg) {
+        resultDisplay.text = arg
+    }
 
     function insertOperator (arg) {
         var patt = /^.*[\.\+\-\*/\^]$/;
@@ -24,32 +28,55 @@ GridLayout {
 
     TextField {
         id: resultDisplay
+        objectName: qsTr("resultDisplay")
+
         focus: true
-        placeholderText: qsTr("0")
+        //placeholderText: qsTr("0")
+        text: qsTr("2+5")
 
         horizontalAlignment: TextInput.AlignRight
-        font.pixelSize: 45
+        font.pixelSize: 35
 
         validator: RegExpValidator { regExp: validatorRegExp }
 
         Layout.column: 0
         Layout.row: 0
         Layout.columnSpan: 6
+        //Layout.columnSpan: 5
 
         Layout.minimumHeight: 60
         Layout.fillWidth: true
     }
 
+    Text {
+        id: memo
+        objectName: "memo"
+        color: "gray"
+        Layout.column: 0
+        Layout.row: 1
+        Layout.columnSpan: 6
+
+        Layout.minimumHeight: 60
+        Layout.fillWidth: true
+
+        horizontalAlignment: Text.AlignRight
+        text: qsTr("")
+        font.pixelSize: 45
+    }
+
     Keys.onPressed:  {
         var symbol = String.fromCharCode(event.key.valueOf());
-        resultDisplay.text += symbol
+        var possible_text = resultDisplay.text + symbol;
+
+        if (validatorRegExp.test(possible_text))
+        resultDisplay.text = possible_text;
     }
 
     Button {
         id: buttonMS
         text: qsTr("MS")
         Layout.column: 0
-        Layout.row: 1
+        Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -60,7 +87,7 @@ GridLayout {
         id: buttonMR
         text: qsTr("MR")
         Layout.column: 1
-        Layout.row: 1
+        Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -71,7 +98,7 @@ GridLayout {
         id: buttonMplus
         text: qsTr("M+")
         Layout.column: 2
-        Layout.row: 1
+        Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -82,7 +109,7 @@ GridLayout {
         id: buttonClear
         text: qsTr("C")
         Layout.column: 3
-        Layout.row: 1
+        Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -93,7 +120,7 @@ GridLayout {
         id: buttonAllClear
         text: qsTr("AC")
         Layout.column: 4
-        Layout.row: 1
+        Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -104,7 +131,7 @@ GridLayout {
         id: buttonBackSpace
         text: qsTr("<-")
         Layout.column: 5
-        Layout.row: 1
+        Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
@@ -119,7 +146,7 @@ GridLayout {
         id: button7
         text: qsTr("7")
         Layout.column: 0
-        Layout.row: 2
+        Layout.row: 3
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -136,7 +163,7 @@ GridLayout {
         id: button8
         text: qsTr("8")
         Layout.column: 1
-        Layout.row: 2
+        Layout.row: 3
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -150,7 +177,7 @@ GridLayout {
         id: button9
         text: qsTr("9")
         Layout.column: 2
-        Layout.row: 2
+        Layout.row: 3
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -164,7 +191,7 @@ GridLayout {
         id: buttonLeftBracket
         text: qsTr("(")
         Layout.column: 3
-        Layout.row: 2
+        Layout.row: 3
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -178,7 +205,7 @@ GridLayout {
         id: buttonRightBracket
         text: qsTr(")")
         Layout.column: 4
-        Layout.row: 2
+        Layout.row: 3
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -192,7 +219,7 @@ GridLayout {
         id: buttonPow
         text: qsTr("^")
         Layout.column: 5
-        Layout.row: 2
+        Layout.row: 3
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -205,7 +232,7 @@ GridLayout {
         id: button4
         text: qsTr("4")
         Layout.column: 0
-        Layout.row: 3
+        Layout.row: 4
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -219,7 +246,7 @@ GridLayout {
         id: button5
         text: qsTr("5")
         Layout.column: 1
-        Layout.row: 3
+        Layout.row: 4
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -233,7 +260,7 @@ GridLayout {
         id: button6
         text: qsTr("6")
         Layout.column: 2
-        Layout.row: 3
+        Layout.row: 4
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -247,7 +274,7 @@ GridLayout {
         id: buttonMul
         text: qsTr("*")
         Layout.column: 3
-        Layout.row: 3
+        Layout.row: 4
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -261,7 +288,7 @@ GridLayout {
         id: buttonDiv
         text: qsTr("÷")
         Layout.column: 4
-        Layout.row: 3
+        Layout.row: 4
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -275,7 +302,7 @@ GridLayout {
         id: buttonSqrt
         text: qsTr("√")
         Layout.column: 5
-        Layout.row: 3
+        Layout.row: 4
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -287,7 +314,7 @@ GridLayout {
         id: button1
         text: qsTr("1")
         Layout.column: 0
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -301,7 +328,7 @@ GridLayout {
         id: button2
         text: qsTr("2")
         Layout.column: 1
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -315,7 +342,7 @@ GridLayout {
         id: button3
         text: qsTr("3")
         Layout.column: 2
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -329,7 +356,7 @@ GridLayout {
         id: buttonPercent
         text: qsTr("%")
         Layout.column: 3
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -342,7 +369,7 @@ GridLayout {
         id: buttonRev
         text: qsTr("1/x")
         Layout.column: 4
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -355,18 +382,20 @@ GridLayout {
         text: qsTr("=")
         Layout.column: 5
         //Layout.row: 4
-        Layout.row: 3
+        Layout.row: 4
         Layout.rowSpan: 2
 
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        onClicked: evaluateSignal(qsTr(resultDisplay.text))
     }
 
     Button {
         id: button0
         text: qsTr("0")
         Layout.column: 0
-        Layout.row: 5
+        Layout.row: 6
         Layout.columnSpan: 2
 
         Layout.fillHeight: true
@@ -381,7 +410,7 @@ GridLayout {
         id: buttonPoint
         text: qsTr(".")
         Layout.column: 2
-        Layout.row: 5
+        Layout.row: 6
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -396,7 +425,7 @@ GridLayout {
         text: qsTr("+")
         Layout.column: 3
         //Layout.row: 5
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -411,7 +440,7 @@ GridLayout {
         text: qsTr("−")
         Layout.column: 4
         //Layout.row: 5
-        Layout.row: 4
+        Layout.row: 5
 
         Layout.fillHeight: true
         Layout.fillWidth: true

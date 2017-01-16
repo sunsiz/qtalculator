@@ -10,6 +10,7 @@ typedef struct yy_buffer_state * YY_BUFFER_STATE;
 extern YY_BUFFER_STATE yy_scan_string(const char * str);
 
 float result = 0;
+char error = 0;
 
 void yyerror(const char* s);
 %}
@@ -18,7 +19,7 @@ void yyerror(const char* s);
 	float fval;
 }
 
-%token<fval> T_FLOAT
+%token<fval> T_NUM
 %token T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_LEFT T_RIGHT
 %left T_PLUS T_MINUS
 %left T_MULTIPLY T_DIVIDE
@@ -39,7 +40,7 @@ line:
     | expression { result = (float)$1;}
 ;
 
-mixed_expression: T_FLOAT                 		 { $$ = $1; }
+mixed_expression: T_NUM                 		 { $$ = $1; }
 	  | mixed_expression T_PLUS mixed_expression	 { $$ = $1 + $3; }
 	  | mixed_expression T_MINUS mixed_expression	 { $$ = $1 - $3; }
 	  | mixed_expression T_MULTIPLY mixed_expression { $$ = $1 * $3; }
@@ -80,5 +81,6 @@ expression:
 }*/
 
 void yyerror(const char* s) {
-    fprintf(stderr, "error: %s\n", s);
+    //fprintf(stderr, "error: %s\n", s);
+    error = 1;
 }

@@ -1,8 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "lexer.h"
-#include "parser.h"
+#include "calculator.h"
 
 extern float result;
 
@@ -13,15 +12,12 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
-    QString str("1.123+1");
+    QObject* root = engine.rootObjects()[0];
 
-    YY_BUFFER_STATE bufferState = yy_scan_string(str.toUtf8().constData());
+    Calculator *calc = new Calculator(root);
 
-    yyparse();
-
-    printf("%f\n", result);
-
-    yy_delete_buffer(bufferState);
+    QObject::connect(root, SIGNAL(evaluateSignal(QString)),
+    calc, SLOT(evaluateSlot(QString)));
 
     return app.exec();
 }
