@@ -19,5 +19,13 @@ int main(int argc, char *argv[]) {
     QObject::connect(root, SIGNAL(evaluateSignal(QString)),
     calc, SLOT(evaluateSlot(QString)));
 
+    QObject::connect(root, SIGNAL(saveMemSignal(QString)),
+    calc, SLOT(saveMemSlot(QString)));
+
+    QObject::connect(root, SIGNAL(readMemSignal()),
+    calc, SLOT(readMemSlot()));
+
+    QObject::connect(root, SIGNAL(addMemSignal()),
+    calc, SLOT(addMemSlot()));
     return app.exec();
 }

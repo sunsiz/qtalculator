@@ -6,6 +6,9 @@
 extern float result;
 extern float error;
 
+float mem;
+char memIsFull = 0;
+
 Calculator::Calculator(QObject *parent) : QObject(parent) {
 
 }
@@ -37,4 +40,23 @@ void Calculator::evaluateSlot(const QString &arg) {
     }
 
     yy_delete_buffer(bufferState);
+}
+
+void Calculator::saveMemSlot(const QString &arg) {
+    QObject* memo = this->parent()->findChild<QObject*>("memo");
+    mem = memo->property("text").toFloat();
+    printf("Saved %f\n", mem);
+    memIsFull = 1;
+}
+
+void Calculator::readMemSlot() {
+    QObject* resultDisplay = this->parent()->findChild<QObject*>("resultDisplay");
+    QString strResult = QString::number(mem);
+    resultDisplay->setProperty("text", strResult);
+}
+
+void Calculator::addMemSlot() {
+    QObject* memo = this->parent()->findChild<QObject*>("memo");
+    mem += memo->property("text").toFloat();
+    printf("Added to mem. Now mem is %f\n", mem);
 }

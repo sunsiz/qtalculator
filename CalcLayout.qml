@@ -27,8 +27,6 @@ GridLayout {
     }
 
     Keys.onPressed:  {
-        var symbol = String.fromCharCode(event.key.valueOf());
-
         switch(event.key) {
         case Qt.Key_Backspace:
             resultDisplay.text = resultDisplay.text.substring(0, resultDisplay.length - 1)
@@ -36,15 +34,26 @@ GridLayout {
         case Qt.Key_Delete:
             resultDisplay.text = ""
             break
-        /*case Qt.Key_Escape:
-            memo.text = ""
-            resultDisplay.text = ""
-            break*/
+        case Qt.Key_Control:
+            saveMemSignal(memo.text)
+            buttonMR.enabled = true
+            buttonMplus.enabled = true
+            break
+        case Qt.Key_Alt:
+            if (buttonMR.enabled) readMemSignal()
+            break
+        case Qt.Key_Shift:
+            if (buttonMplus.enabled) addMemSignal()
+            break
         case Qt.Key_Enter:
             evaluateSignal(qsTr(resultDisplay.text));
             break
         case Qt.Key_Return:
             evaluateSignal(qsTr(resultDisplay.text));
+            break
+        case Qt.Key_Escape:
+            resultDisplay.text = ""
+            memo.text = "0"
             break
         }
     }
@@ -68,6 +77,7 @@ GridLayout {
         onFocusChanged: resultDisplay.forceActiveFocus()
         Layout.minimumHeight: 60
         Layout.fillWidth: true
+
     }
 
     Text {
@@ -82,25 +92,38 @@ GridLayout {
         Layout.fillWidth: true
 
         horizontalAlignment: Text.AlignRight
-        text: qsTr("")
+        text: qsTr("0")
         font.pixelSize: 45
+
+        onTextChanged: {
+            if(/[0-9]+|[0-9]+\.[0-9]+/.test(memo.text)) {
+                buttonMS.enabled = true;
+            } else {
+                buttonMS.enabled = false;
+            }
+        }
     }
 
     Button {
         id: buttonMS
         text: qsTr("MS")
+
         Layout.column: 0
         Layout.row: 2
-
-        enabled: false
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        ToolTip.text: "Save to memory (s)"
+        ToolTip.text: "Save to memory (Ctrl)"
         hoverEnabled: true
         ToolTip.visible: hovered
+
+        onClicked: {
+            saveMemSignal(qsTr(memo.text))
+            buttonMR.enabled = true
+            buttonMplus.enabled = true
+        }
     }
 
     Button {
@@ -115,9 +138,12 @@ GridLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        ToolTip.text: "Read from memory (r)"
+        ToolTip.text: "Read from memory (Alt)"
         hoverEnabled: true
         ToolTip.visible: hovered
+
+        onClicked: readMemSignal()
+
     }
 
     Button {
@@ -132,14 +158,16 @@ GridLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        ToolTip.text: "Add to value in memory (a)"
+        ToolTip.text: "Add to value in memory (Shift)"
         hoverEnabled: true
         ToolTip.visible: hovered
+
+        onClicked: addMemSignal()
     }
 
     Button {
         id: buttonClear
-        text: qsTr("C/CE")
+        text: qsTr("C")
         Layout.column: 3
         Layout.row: 2
 
@@ -150,6 +178,11 @@ GridLayout {
         ToolTip.text: "Clear (esc)"
         hoverEnabled: true
         ToolTip.visible: hovered
+
+        onClicked: {
+            memo.text = "0"
+            resultDisplay.text = ""
+        }
     }
 
     Button {

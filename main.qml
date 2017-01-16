@@ -8,7 +8,10 @@ ApplicationWindow {
     height: 480
     title: qsTr("QTalculator")
 
-    signal evaluateSignal(string arg)
+    signal evaluateSignal (string arg)
+    signal saveMemSignal (string arg)
+    signal readMemSignal ()
+    signal addMemSignal ()
 
     CalcLayout {
     }
