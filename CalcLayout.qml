@@ -71,7 +71,7 @@ GridLayout {
         placeholderText: qsTr("0")
 
         horizontalAlignment: TextInput.AlignRight
-        font.pixelSize: 35
+        font.pixelSize: 55
 
         validator: RegExpValidator { regExp: validatorRegExp }
 
@@ -93,12 +93,12 @@ GridLayout {
         Layout.row: 1
         Layout.columnSpan: 5
 
-        Layout.minimumHeight: 60
+        Layout.minimumHeight: 90
         Layout.fillWidth: true
 
         horizontalAlignment: Text.AlignRight
         text: qsTr("0")
-        font.pixelSize: 45
+        font.pixelSize: 85
 
         onTextChanged: {
             if(/[0-9]+|[0-9]+\.[0-9]+/.test(memo.text)) {
