@@ -36,7 +36,7 @@ void Calculator::evaluateSlot(const QString &arg) {
     else {
         fprintf(stderr, "Error\n");
 
-        memo->setProperty("text", "Invalid expression");
+        memo->setProperty("text", "Invalid");
     }
 
     yy_delete_buffer(bufferState);
