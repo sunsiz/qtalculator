@@ -20,5 +20,7 @@
 "/"		{return T_DIVIDE;}
 "("		{return T_LEFT;}
 ")"		{return T_RIGHT;}
+"^"		{return T_POW;}
+"s"	{return T_SQRT;}
 
 %%

@@ -11,19 +11,25 @@ GridLayout {
     columns: 6
     rows: 5
 
-    property var validatorRegExp: /^([(]*)(([1-9]+[0]*)|([1-9]+[0]*\.[0-9]))(?:([-+*\/\^])([(]*)((([1-9]+[0]*)|([1-9]+[0]*\.[0-9]+))([)]*)))+$/
+    //property var validatorRegExp: /^(([(]|s[(])*)(([1-9]+[0]*)|([1-9]+[0]*\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([1-9]+[0]*)|([1-9]+[0]*\.[0-9]+))([)]*)))+$/
+    property var validatorRegExp: /^(([(]|s[(])*)(([1-9]+[0]*)|([1-9]+[0]*\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([1-9]+[0]*)|([1-9]+[0]*\.[0-9]+))([)]*)))+$/
 
     function setResult (arg) {
         resultDisplay.text = arg
     }
 
     function insertOperator (arg) {
-        var patt = /^.*[\.\+\-\*/\^]$/;
+        var patt = /^.*[\.\+\-\*/\^(s\()]$/;
+
         if (patt.test(resultDisplay.text)) {
-            resultDisplay.text = resultDisplay.text.substring(0, resultDisplay.length - 1) + arg
+            var len = 1
+            resultDisplay.text = resultDisplay.text.substring(0, resultDisplay.length - len) + arg
         }
         else if (resultDisplay.text != "")
             resultDisplay.text += arg
+        var possibleResult = resultDisplay.text + arg
+
+
     }
 
     Keys.onPressed:  {
@@ -258,7 +264,11 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            resultDisplay.text = resultDisplay.text + this.text
+            //var patt = /^.*[\.\+\-\*/\^(s\()]$/;
+            //if(patt.test(resultDisplay.text) || resultDisplay.text === "")
+            //resultDisplay.text = resultDisplay.text + this.text
+
+            resultDisplay.insert(resultDisplay.text.length, "(")
         }
     }
 
@@ -272,7 +282,9 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            resultDisplay.text = resultDisplay.text + this.text
+            //if(/^*.[0-9]+$/.test(resultDisplay.text))
+            //resultDisplay.text = resultDisplay.text + this.text
+            resultDisplay.insert(resultDisplay.text.length, ")")
         }
     }
 
@@ -328,7 +340,8 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            insertOperator(this.text)
+            //insertOperator(this.text)
+            resultDisplay.insert(resultDisplay.text.length, "*")
         }
     }
 
@@ -342,7 +355,8 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            insertOperator("\/")
+            //insertOperator("\/")
+            resultDisplay.insert(resultDisplay.text.length, "/")
         }
     }
 
@@ -391,11 +405,10 @@ GridLayout {
     Button {
         id: buttonEquals
         text: qsTr("=")
-        Layout.column: 4
-        Layout.row: 5
-        Layout.rowSpan: 2
+        Layout.column: 0
+        Layout.row: 7
+        Layout.columnSpan: 5
 
-        Layout.fillHeight: true
         Layout.fillWidth: true
 
         onClicked: evaluateSignal(qsTr(resultDisplay.text))
@@ -430,7 +443,8 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            insertOperator(this.text)
+            //insertOperator(this.text)
+            resultDisplay.insert(resultDisplay.text.length, ' .')
         }
     }
 
@@ -444,7 +458,39 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            insertOperator(this.text)
+            //insertOperator(this.text)
+            resultDisplay.insert(resultDisplay.text.length, '+')
+        }
+    }
+
+    Button {
+        id: buttonPow
+        text: qsTr("^")
+        Layout.column: 4
+        Layout.row: 5
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        onClicked: {
+            //insertOperator("\^")
+            resultDisplay.insert(resultDisplay.text.length, '^')
+        }
+    }
+
+    Button {
+        id: buttonSqrt
+        text: qsTr("√")
+        Layout.column: 4
+        Layout.row: 6
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        onClicked: {
+           // if(/^.*[\.\+\-\*/\^(]$/.test(resultDisplay.text))
+           // resultDisplay.text += "s("
+            resultDisplay.insert(resultDisplay.text.length, 's(');
         }
     }
 
@@ -459,7 +505,8 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            insertOperator("-")
+            //insertOperator("-")
+            resultDisplay.insert(resultDisplay.text.length, " -")
         }
     }
 }
