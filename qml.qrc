@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>CalcLayout.qml</file>
-        <file>CalcLayoutForm.qml</file>
         <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>
