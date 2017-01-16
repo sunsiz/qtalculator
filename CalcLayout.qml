@@ -11,8 +11,7 @@ GridLayout {
     columns: 6
     rows: 5
 
-    //property var validatorRegExp: /^(([(]|s[(])*)(([1-9]+[0]*)|([1-9]+[0]*\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([1-9]+[0]*)|([1-9]+[0]*\.[0-9]+))([)]*)))+$/
-    property var validatorRegExp: /^(([(]|s[(])*)(([1-9]+[0]*)|([1-9]+[0]*\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([1-9]+[0]*)|([1-9]+[0]*\.[0-9]+))([)]*)))+$/
+    property var validatorRegExp: /^(([(]|s[(])*)(([0-9]+)|([0-9]+\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([0-9]+)|([0-9]+\.[0-9]+))([)]*)))+$/
 
     function setResult (arg) {
         resultDisplay.text = arg
@@ -264,10 +263,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //var patt = /^.*[\.\+\-\*/\^(s\()]$/;
-            //if(patt.test(resultDisplay.text) || resultDisplay.text === "")
-            //resultDisplay.text = resultDisplay.text + this.text
-
             resultDisplay.insert(resultDisplay.text.length, "(")
         }
     }
@@ -282,8 +277,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //if(/^*.[0-9]+$/.test(resultDisplay.text))
-            //resultDisplay.text = resultDisplay.text + this.text
             resultDisplay.insert(resultDisplay.text.length, ")")
         }
     }
@@ -340,7 +333,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //insertOperator(this.text)
             resultDisplay.insert(resultDisplay.text.length, "*")
         }
     }
@@ -355,7 +347,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //insertOperator("\/")
             resultDisplay.insert(resultDisplay.text.length, "/")
         }
     }
@@ -443,8 +434,7 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //insertOperator(this.text)
-            resultDisplay.insert(resultDisplay.text.length, ' .')
+            resultDisplay.insert(resultDisplay.text.length, ".")
         }
     }
 
@@ -458,7 +448,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //insertOperator(this.text)
             resultDisplay.insert(resultDisplay.text.length, '+')
         }
     }
@@ -473,7 +462,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //insertOperator("\^")
             resultDisplay.insert(resultDisplay.text.length, '^')
         }
     }
@@ -488,8 +476,6 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-           // if(/^.*[\.\+\-\*/\^(]$/.test(resultDisplay.text))
-           // resultDisplay.text += "s("
             resultDisplay.insert(resultDisplay.text.length, 's(');
         }
     }
@@ -505,8 +491,7 @@ GridLayout {
         Layout.fillWidth: true
 
         onClicked: {
-            //insertOperator("-")
-            resultDisplay.insert(resultDisplay.text.length, " -")
+            resultDisplay.insert(resultDisplay.text.length, '-')
         }
     }
 }

@@ -54,21 +54,6 @@ mixed_expression: T_NUM                 		 { $$ = $1; }
 
 %%
 
-/*float calculate(char* arg) {
-    error = 0;
-
-    yy_scan_string(arg);
-    
-    yyparse();
-    return result;
-}*/
-
-/*int main() {
-    printf("%f\n", calculate("((2+4)+2)\n"));
-	return 0;
-}*/
-
 void yyerror(const char* s) {
-    //fprintf(stderr, "error: %s\n", s);
     error = 1;
 }
