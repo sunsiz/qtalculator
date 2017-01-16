@@ -24,7 +24,7 @@ GridLayout {
         return rowMulti * item.Layout.rowSpan
     }
 
-    property var validatorRegExp: /^(([(]|s[(])*)(([0-9]+)|([0-9]+\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([0-9]+)|([0-9]+\.[0-9]+))([)]*)))+$/
+    property var validatorRegExp: /^(([(]|s[(])*)(([0-9]+)|([0-9]+\.[0-9]))([)]*)(?:([-+*\/\^])(([(]|s[(])*)((([0-9]+)|([0-9]+\.[0-9]+))([)]*)))+$/
 
     function setResult (arg) {
         resultDisplay.text = arg
