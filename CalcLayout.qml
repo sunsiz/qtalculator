@@ -1,15 +1,30 @@
 ﻿import QtQuick 2.7
+import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Layouts 1.0
+import QtQuick.Controls.Material 2.0
+
 
 GridLayout {
+    id: "grid"
     anchors.fill: parent
-    anchors.margins: 5
-    rowSpacing: 0
+    anchors.margins: 0
+
+    rowSpacing: 1
+    columnSpacing: 1
 
     columns: 6
     rows: 5
+    property double colMulti : grid.width / grid.columns
+    property double rowMulti : grid.height / grid.rows
+
+    function prefWidth(item){
+        return colMulti * item.Layout.columnSpan
+    }
+
+    function prefHeight(item){
+        return rowMulti * item.Layout.rowSpan
+    }
 
     property var validatorRegExp: /^(([(]|s[(])*)(([0-9]+)|([0-9]+\.[0-9]))(?:([-+*\/\^])(([(]|s[(])*)((([0-9]+)|([0-9]+\.[0-9]+))([)]*)))+$/
 
@@ -60,6 +75,12 @@ GridLayout {
             resultDisplay.text = ""
             memo.text = "0"
             break
+        case Qt.Key_Menu:
+            if (memo.text.charAt(0) === "-")
+                memo.text = memo.text.substring(1);
+            else if(/[0-9]/.test(memo.text.charAt(0)))
+                memo.text = '-' + memo.text;
+            break
         }
     }
 
@@ -69,9 +90,8 @@ GridLayout {
 
         focus: true
         placeholderText: qsTr("0")
-
         horizontalAlignment: TextInput.AlignRight
-        font.pixelSize: 55
+        font.pixelSize: 45
 
         validator: RegExpValidator { regExp: validatorRegExp }
 
@@ -89,6 +109,9 @@ GridLayout {
         id: memo
         objectName: "memo"
         color: "gray"
+
+        text: qsTr("0")
+
         Layout.column: 0
         Layout.row: 1
         Layout.columnSpan: 5
@@ -97,14 +120,15 @@ GridLayout {
         Layout.fillWidth: true
 
         horizontalAlignment: Text.AlignRight
-        text: qsTr("0")
-        font.pixelSize: 85
+        font.pixelSize: 65
 
         onTextChanged: {
             if(/[0-9]+|[0-9]+\.[0-9]+/.test(memo.text)) {
                 buttonMS.enabled = true;
+                buttonReverse.enabled = true;
             } else {
                 buttonMS.enabled = false;
+                buttonReverse.enabled = false;
             }
         }
     }
@@ -119,6 +143,16 @@ GridLayout {
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        Layout.preferredWidth  : grid.prefWidth(this)
+        Layout.preferredHeight : grid.prefHeight(this)
+
+        background: Rectangle {
+            color: buttonMS.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
 
         ToolTip.text: "Save to memory (Ctrl)"
         hoverEnabled: true
@@ -139,9 +173,19 @@ GridLayout {
 
         enabled: false
 
+        Layout.preferredWidth  : grid.prefWidth(this)
+        Layout.preferredHeight : grid.prefHeight(this)
+
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: buttonMR.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
 
         ToolTip.text: "Read from memory (Alt)"
         hoverEnabled: true
@@ -159,9 +203,19 @@ GridLayout {
 
         enabled: false
 
+
+        Layout.preferredWidth  : grid.prefWidth(this)
+        Layout.preferredHeight : grid.prefHeight(this)
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: buttonMplus.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
 
         ToolTip.text: "Add to value in memory (Shift)"
         hoverEnabled: true
@@ -176,9 +230,19 @@ GridLayout {
         Layout.column: 3
         Layout.row: 2
 
+
+        Layout.preferredWidth  : grid.prefWidth(this)
+        Layout.preferredHeight : grid.prefHeight(this)
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: buttonClear.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
 
         ToolTip.text: "Clear (esc)"
         hoverEnabled: true
@@ -192,13 +256,23 @@ GridLayout {
 
     Button {
         id: buttonBackSpace
-        text: qsTr("<-")
+        text: qsTr("⌫")
         Layout.column: 4
         Layout.row: 2
 
+
+        Layout.preferredWidth  : grid.prefWidth(this)
+        Layout.preferredHeight : grid.prefHeight(this)
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: buttonBackSpace.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text.substring(0, resultDisplay.length - 1)
@@ -211,8 +285,15 @@ GridLayout {
     Button {
         id: button7
         text: qsTr("7")
+
         Layout.column: 0
         Layout.row: 3
+
+        background: Rectangle {
+            color: button7.down ? "#90A4AE" : "#B0BEC5"
+        }
+        font.pixelSize: 30
+        flat: true
 
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -234,6 +315,12 @@ GridLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
+        background: Rectangle {
+            color: button8.down ? "#90A4AE" : "#B0BEC5"
+        }
+        font.pixelSize: 30
+        flat: true
+
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
         }
@@ -245,8 +332,14 @@ GridLayout {
         Layout.column: 2
         Layout.row: 3
 
+        background: Rectangle {
+            color: button9.down ? "#90A4AE" : "#B0BEC5"
+        }
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -265,6 +358,13 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, "(")
         }
+        background: Rectangle {
+            color: buttonLeftBracket.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
+
     }
 
     Button {
@@ -279,6 +379,12 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, ")")
         }
+        background: Rectangle {
+            color: buttonRightBracket.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
     }
 
     Button {
@@ -287,8 +393,14 @@ GridLayout {
         Layout.column: 0
         Layout.row: 4
 
+        background: Rectangle {
+            color: button4.down ? "#90A4AE" : "#B0BEC5"
+        }
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -301,8 +413,14 @@ GridLayout {
         Layout.column: 1
         Layout.row: 4
 
+        background: Rectangle {
+            color: button5.down ? "#90A4AE" : "#B0BEC5"
+        }
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -315,8 +433,14 @@ GridLayout {
         Layout.column: 2
         Layout.row: 4
 
+        background: Rectangle {
+            color: button6.down ? "#90A4AE" : "#B0BEC5"
+        }
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -335,6 +459,12 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, "*")
         }
+        background: Rectangle {
+            color: buttonMul.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
     }
 
     Button {
@@ -349,6 +479,12 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, "/")
         }
+        background: Rectangle {
+            color: buttonDiv.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
     }
 
     Button {
@@ -357,8 +493,14 @@ GridLayout {
         Layout.column: 0
         Layout.row: 5
 
+        background: Rectangle {
+            color: button1.down ? "#90A4AE" : "#B0BEC5"
+        }
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -371,8 +513,14 @@ GridLayout {
         Layout.column: 1
         Layout.row: 5
 
+        background: Rectangle {
+            color: button2.down ? "#90A4AE" : "#B0BEC5"
+        }
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -387,6 +535,12 @@ GridLayout {
 
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: button3.down ? "#90A4AE" : "#B0BEC5"
+        }
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -407,17 +561,55 @@ GridLayout {
         ToolTip.text: "Evaluate expression (return) or (enter)"
         hoverEnabled: true
         ToolTip.visible: hovered
+
+        background: Rectangle {
+            color: buttonEquals.down ? "#546E7A" : "#607D8B"
+        }
+
+        font.pixelSize: 30
+        flat: true
+    }
+
+    Button {
+        id: buttonReverse
+        text: qsTr("±")
+        Layout.column: 0
+        Layout.row: 6
+
+        hoverEnabled: true
+        ToolTip.visible: hovered
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        background: Rectangle {
+            color: buttonReverse.down ? "#90A4AE" : "#B0BEC5"
+        }
+        font.pixelSize: 30
+        flat: true
+
+        onClicked: {
+            if (memo.text.charAt(0) === "-")
+                memo.text = memo.text.substring(1);
+            else if(/[0-9]/.test(memo.text.charAt(0)))
+                memo.text = '-' + memo.text;
+        }
+        ToolTip.text: "Change sign (menu)"
     }
 
     Button {
         id: button0
         text: qsTr("0")
-        Layout.column: 0
+        Layout.column: 1
         Layout.row: 6
-        Layout.columnSpan: 2
 
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: button0.down ? "#90A4AE" : "#B0BEC5"
+        }
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.text = resultDisplay.text + this.text
@@ -432,6 +624,12 @@ GridLayout {
 
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        background: Rectangle {
+            color: buttonPoint.down ? "#90A4AE" : "#B0BEC5"
+        }
+        font.pixelSize: 30
+        flat: true
 
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, ".")
@@ -450,6 +648,13 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, '+')
         }
+
+        background: Rectangle {
+            color: buttonPlus.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
     }
 
     Button {
@@ -464,6 +669,12 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, '^')
         }
+        background: Rectangle {
+            color: buttonPow.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
     }
 
     Button {
@@ -475,9 +686,18 @@ GridLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
+        hoverEnabled: true
+        ToolTip.visible: hovered
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, 's(');
         }
+        background: Rectangle {
+            color: buttonSqrt.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
+        ToolTip.text: "Square root (s()"
     }
 
     Button {
@@ -493,5 +713,11 @@ GridLayout {
         onClicked: {
             resultDisplay.insert(resultDisplay.text.length, '-')
         }
+        background: Rectangle {
+            color: buttonMinus.down ? "#B0BEC5" : "#CFD8DC"
+        }
+
+        font.pixelSize: 30
+        flat: true
     }
 }

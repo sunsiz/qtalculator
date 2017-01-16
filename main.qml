@@ -3,9 +3,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 
 ApplicationWindow {
+    minimumHeight: 740
+    minimumWidth: 580
     visible: true
-    width: 640
-    height: 480
     title: qsTr("QTalculator")
 
     signal evaluateSignal (string arg)
