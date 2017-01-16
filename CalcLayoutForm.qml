@@ -12,6 +12,7 @@ GridLayout {
     rows: 5
 
     property var validatorRegExp: /^([(]*)(([0-9]+)+)(?:([-+*\/\^])([(]*)(([0-9]+)+([)]*)))+$/
+    property var known_operators: /[\.\+\-\*/\^]/
 
     function setResult (arg) {
         resultDisplay.text = arg
@@ -31,8 +32,7 @@ GridLayout {
         objectName: qsTr("resultDisplay")
 
         focus: true
-        //placeholderText: qsTr("0")
-        text: qsTr("2+5")
+        placeholderText: qsTr("0")
 
         horizontalAlignment: TextInput.AlignRight
         font.pixelSize: 35
@@ -41,9 +41,10 @@ GridLayout {
 
         Layout.column: 0
         Layout.row: 0
-        Layout.columnSpan: 6
+        Layout.columnSpan: 5
         //Layout.columnSpan: 5
 
+        onFocusChanged: resultDisplay.forceActiveFocus()
         Layout.minimumHeight: 60
         Layout.fillWidth: true
     }
@@ -54,7 +55,7 @@ GridLayout {
         color: "gray"
         Layout.column: 0
         Layout.row: 1
-        Layout.columnSpan: 6
+        Layout.columnSpan: 5
 
         Layout.minimumHeight: 60
         Layout.fillWidth: true
@@ -66,10 +67,25 @@ GridLayout {
 
     Keys.onPressed:  {
         var symbol = String.fromCharCode(event.key.valueOf());
-        var possible_text = resultDisplay.text + symbol;
 
-        if (validatorRegExp.test(possible_text))
-        resultDisplay.text = possible_text;
+        switch(event.key) {
+        case Qt.Key_Backspace:
+            resultDisplay.text = resultDisplay.text.substring(0, resultDisplay.length - 1)
+            break
+        case Qt.Key_Delete:
+            resultDisplay.text = ""
+            break
+        /*case Qt.Key_Escape:
+            memo.text = ""
+            resultDisplay.text = ""
+            break*/
+        case Qt.Key_Enter:
+            evaluateSignal(qsTr(resultDisplay.text));
+            break
+        case Qt.Key_Return:
+            evaluateSignal(qsTr(resultDisplay.text));
+            break
+        }
     }
 
     Button {
@@ -78,9 +94,15 @@ GridLayout {
         Layout.column: 0
         Layout.row: 2
 
+        enabled: false
+
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        ToolTip.text: "Save to memory (s)"
+        hoverEnabled: true
+        ToolTip.visible: hovered
     }
 
     Button {
@@ -89,9 +111,15 @@ GridLayout {
         Layout.column: 1
         Layout.row: 2
 
+        enabled: false
+
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        ToolTip.text: "Read from memory (r)"
+        hoverEnabled: true
+        ToolTip.visible: hovered
     }
 
     Button {
@@ -100,37 +128,36 @@ GridLayout {
         Layout.column: 2
         Layout.row: 2
 
+        enabled: false
+
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        ToolTip.text: "Add to value in memory (a)"
+        hoverEnabled: true
+        ToolTip.visible: hovered
     }
 
     Button {
         id: buttonClear
-        text: qsTr("C")
+        text: qsTr("C/CE")
         Layout.column: 3
         Layout.row: 2
 
         Layout.maximumHeight: 48
         Layout.fillHeight: true
         Layout.fillWidth: true
-    }
 
-    Button {
-        id: buttonAllClear
-        text: qsTr("AC")
-        Layout.column: 4
-        Layout.row: 2
-
-        Layout.maximumHeight: 48
-        Layout.fillHeight: true
-        Layout.fillWidth: true
+        ToolTip.text: "Clear (esc)"
+        hoverEnabled: true
+        ToolTip.visible: hovered
     }
 
     Button {
         id: buttonBackSpace
         text: qsTr("<-")
-        Layout.column: 5
+        Layout.column: 4
         Layout.row: 2
 
         Layout.maximumHeight: 48
@@ -140,6 +167,9 @@ GridLayout {
         onClicked: {
             resultDisplay.text = resultDisplay.text.substring(0, resultDisplay.length - 1)
         }
+        ToolTip.text: "(backspace)"
+        hoverEnabled: true
+        ToolTip.visible: hovered
     }
 
     Button {
@@ -216,19 +246,6 @@ GridLayout {
     }
 
     Button {
-        id: buttonPow
-        text: qsTr("^")
-        Layout.column: 5
-        Layout.row: 3
-
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        onClicked: {
-            insertOperator(this.text)
-        }
-    }
-
-    Button {
         id: button4
         text: qsTr("4")
         Layout.column: 0
@@ -299,18 +316,6 @@ GridLayout {
     }
 
     Button {
-        id: buttonSqrt
-        text: qsTr("√")
-        Layout.column: 5
-        Layout.row: 4
-
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        visible: false
-    }
-
-    Button {
         id: button1
         text: qsTr("1")
         Layout.column: 0
@@ -353,42 +358,20 @@ GridLayout {
     }
 
     Button {
-        id: buttonPercent
-        text: qsTr("%")
-        Layout.column: 3
-        Layout.row: 5
-
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        visible: false
-    }
-
-    //TO REMOVE
-    Button {
-        id: buttonRev
-        text: qsTr("1/x")
-        Layout.column: 4
-        Layout.row: 5
-
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        visible: false
-    }
-
-    Button {
         id: buttonEquals
         text: qsTr("=")
-        Layout.column: 5
-        //Layout.row: 4
-        Layout.row: 4
+        Layout.column: 4
+        Layout.row: 5
         Layout.rowSpan: 2
 
         Layout.fillHeight: true
         Layout.fillWidth: true
 
         onClicked: evaluateSignal(qsTr(resultDisplay.text))
+
+        ToolTip.text: "Evaluate expression (return) or (enter)"
+        hoverEnabled: true
+        ToolTip.visible: hovered
     }
 
     Button {
@@ -424,7 +407,6 @@ GridLayout {
         id: buttonPlus
         text: qsTr("+")
         Layout.column: 3
-        //Layout.row: 5
         Layout.row: 5
 
         Layout.fillHeight: true
@@ -438,9 +420,8 @@ GridLayout {
     Button {
         id: buttonMinus
         text: qsTr("−")
-        Layout.column: 4
-        //Layout.row: 5
-        Layout.row: 5
+        Layout.column: 3
+        Layout.row: 6
 
         Layout.fillHeight: true
         Layout.fillWidth: true
